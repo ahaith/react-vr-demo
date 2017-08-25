@@ -12,6 +12,7 @@ import {
 } from 'react-vr';
 
 import DisplayModel from './components/DisplayModel'
+import ComeOnLook from './components/ComeOnLook'
 
 export default class vr_test extends React.Component {
   render() {
@@ -19,26 +20,84 @@ export default class vr_test extends React.Component {
       <View
       >
         <Pano source={asset('interior.jpg')}/>
-        <DisplayModel
-            style={{transform: [
-                {translate:[0, -1, -2.5]}
-                
-            ]}}
+        
+        <ComeOnLook>
+            <DisplayModel
+                style={{transform: [
+                    {translate:[0, -1, -2.5]}
+                    
+                ]}}
+            >
+                <Model
+                    source={{
+                        obj: asset('Reliquary_OBJ_lower_smooth.obj')
+                    }}
+                    lit
+                    style={{
+                        transform: [
+                            {scale: 0.2},
+                            {rotateY:180}
+                        ]
+                    }}
+                    texture={asset('Reliquary OBJ.jpg')}
+                />
+            </DisplayModel>
+        </ComeOnLook>
+
+        <ComeOnLook
+            style={{
+                transform:[{rotateY:-90}]
+            }}
         >
-            <Model
-                source={{
-                    obj: asset('Reliquary_OBJ_lower_smooth.obj')
-                }}
-                lit
-                style={{
-                    transform: [
-                        {scale: 0.2},
-                        {rotateY:180}
-                    ]
-                }}
-                texture={asset('Reliquary OBJ.jpg')}
-            />
-        </DisplayModel>
+            <DisplayModel
+                style={{transform: [
+                    {translate:[0, -1, -2.5]}
+                    
+                ]}}
+            >
+                <Model
+                    source={{
+                        obj: asset('6statuette_30k_4096.obj')
+                    }}
+                    lit
+                    style={{
+                        transform: [
+                            {scale: 0.2},
+                            {rotateY:180}
+                        ]
+                    }}
+                    texture={asset('texturewb.jpg')}
+                />
+            </DisplayModel>
+        </ComeOnLook>
+
+        <ComeOnLook
+            style={{
+                transform:[{rotateY:180}]
+            }}
+        >
+            <DisplayModel
+                style={{transform: [
+                    {translate:[0, -1, -2.5]}
+                    
+                ]}}
+            >
+                <Model
+                    source={{
+                        obj: asset('6statue_30k_4096.obj')
+                    }}
+                    lit
+                    style={{
+                        transform: [
+                            {scale: 0.2},
+                            {rotateY:180}
+                        ]
+                    }}
+                    texture={asset('statue_30k_4096.jpg')}
+                />
+            </DisplayModel>
+        </ComeOnLook>
+        
         <SpotLight
             style={{
                 transform: [
