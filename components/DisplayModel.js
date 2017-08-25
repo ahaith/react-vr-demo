@@ -16,7 +16,11 @@ const ROTATION_INCREMENT = 30;
 export default class display_model extends React.Component {
     constructor(props) {
         super(props);
-        this.state={rotation: new Animated.Value(0)}
+        this.state={
+            rotation: new Animated.Value(0),
+            increaseButtonActive: false,
+            decreaseButtonActive: false
+        }
         this.currentRot = 0;
         //keep track of the value set by the animated rotation
         this.state.rotation.addListener( (val) => {
@@ -43,9 +47,10 @@ export default class display_model extends React.Component {
                 //perform a 90 deg rotation
                 this.state.rotation,
                 {
-                    toValue: this.currentRot + 90,
+                    toValue: increasing? this.currentRot+90: this.currentRot-90,
                     duration: 2500,
-                    easing: skipEaseIn ? Easing.linear : Easing.in(Easing.ease)
+                    // easing: skipEaseIn ? Easing.linear : Easing.in(Easing.ease)
+                    easing: skipEaseIn ? Easing.linear : Easing.in(Easing.quad)
                 }
             );
             this.rotateAnim.start(
@@ -83,14 +88,16 @@ export default class display_model extends React.Component {
                         height:4,
                         width:0.3,
                         transform: [
-                            {translate: [-0.7, 0.4, 0.1]}
+                            {translate: [-0.5, 0.4, 0.1]}
                         ]
                     }}
                     onClick={()=>{this.onClickRotate(false)}}
                     onEnter={()=>{
+                        this.setState({decreaseButtonActive:true})
                         this.startRotate(false)
                     }}
                     onExit={()=>{
+                        this.setState({decreaseButtonActive:false})
                         this.stopRotate(false)
                     }}
                 >
@@ -98,7 +105,7 @@ export default class display_model extends React.Component {
                             style={{
                                 height:'50%',
                                 padding:'10',
-                                backgroundColor: 'grey',
+                                backgroundColor: this.state.decreaseButtonActive ? 'lightgrey' : 'grey',
                                 fontSize:0.5,
                                 textAlign:'right'
                             }}
@@ -118,7 +125,7 @@ export default class display_model extends React.Component {
                             transform: [
                                 {translateY:0},
                             ],
-                            color:this.props.pedestalColor || "#7c423b"
+                            color: this.props.active ? "#7c423b" : "#2d1714"
                         }}
                         lit
                     />
@@ -148,22 +155,24 @@ export default class display_model extends React.Component {
                         height:4,
                         width:0.3,
                         transform: [
-                            {translate: [0.7, 0.4, 0.1]}
+                            {translate: [0.4, 0.4, 0.1]}
                         ]
                     }}
                     onClick={()=>{this.onClickRotate(true)}}
                     onEnter={()=>{
-                        this.startRotate(false)
+                        this.setState({increaseButtonActive:true})
+                        this.startRotate(true)
                     }}
                     onExit={()=>{
-                        this.stopRotate(false)
+                        this.setState({increaseButtonActive:false})
+                        this.stopRotate(true)
                     }}
                 >
                     <Text
                         style={{
                             height:'50%',
                             left:'0px',
-                            backgroundColor: 'grey',
+                            backgroundColor: this.state.increaseButtonActive ? 'lightgrey' : 'grey',
                             fontSize:0.5,
                             textAlign:'left'
                         }}

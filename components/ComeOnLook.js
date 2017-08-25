@@ -15,6 +15,7 @@ export default class ComeOnLook extends React.Component {
     }
     
     approach() {
+        this.setState({coming: true})
         if(this.retreatAnim) {
             this.retreatAnim.stop();
         }
@@ -32,6 +33,7 @@ export default class ComeOnLook extends React.Component {
     }
     
     retreat() {
+        this.setState({coming: false})
         this.retreatAnim = Animated.sequence([
             Animated.delay(1000),
             Animated.timing(
@@ -49,7 +51,7 @@ export default class ComeOnLook extends React.Component {
         
         //clone the children but add props for when they are hovered over
         let children = React.cloneElement(this.props.children, {
-            
+            active:this.state.coming
         })
         
         return (
@@ -65,7 +67,7 @@ export default class ComeOnLook extends React.Component {
                     onEnter={this.approach.bind(this)}
                     onExit={this.retreat.bind(this)}
                 >
-                    {this.props.children}
+                    {children}
                 </Animated.View>
             </View>
         )
