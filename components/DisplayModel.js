@@ -4,15 +4,33 @@ import {
     View,
     Cylinder,
     VrButton,
-    Text
+    Text,
+    Animated
 } from 'react-vr';
 
-const ROTATION_INCREMENT = 15;
+const ROTATION_INCREMENT = 30;
 
 export default class display_model extends React.Component {
     constructor(props) {
         super(props);
-        this.state={rotation:0}
+        this.state={rotation: new Animated.Value(0)}
+        this.currentRot = 0;
+        //keep track of the value set by the animated rotation
+        this.state.rotation.addListener( (val) => {
+            this.currentRot = val.value;
+            console.log('rotation changed:', val);
+        })
+    }
+    
+    onClickRotate(increasing) {
+        //increasing is a bool indicating whether the rotation should increase or decrease
+        let anim = Animated.timing(
+            this.state.rotation,
+            {
+                toValue: increasing ? this.currentRot + ROTATION_INCREMENT : this.currentRot - ROTATION_INCREMENT,
+                duration: 1000
+            }
+        ).start();
     }
     
     render() {
@@ -32,12 +50,7 @@ export default class display_model extends React.Component {
                             {translate: [-0.7, 0.4, 0]}
                         ]
                     }}
-                    onClick={() => {
-                        this.setState({
-                            rotation: this.state.rotation - ROTATION_INCREMENT
-                        });
-                    }
-                    }
+                    onClick={()=>{this.onClickRotate(false)}}
                 >
                     <View>
                     <Text
@@ -67,7 +80,7 @@ export default class display_model extends React.Component {
                         }}
                         lit
                     />
-                    <View
+                    <Animated.View
                         style={{
                             position:'absolute',
                             transform:[
@@ -77,7 +90,7 @@ export default class display_model extends React.Component {
                         }}
                     >
                         {this.props.children}
-                    </View>
+                    </Animated.View>
                 </View>
                 <VrButton
                     style={{
@@ -87,12 +100,7 @@ export default class display_model extends React.Component {
                             {translate: [0.7, 0.4, 0]}
                         ]
                     }}
-                    onClick={() => {
-                        this.setState({
-                            rotation: this.state.rotation + ROTATION_INCREMENT
-                        });
-                    }
-                    }
+                    onClick={()=>{this.onClickRotate(true)}}
                 >
                     <Text
                         style={{
