@@ -4,10 +4,15 @@
 
 // Auto-generated content.
 import {VRInstance} from 'react-vr-web';
+import * as SimpleRayCaster from 'simple-raycaster'
 
 function init(bundle, parent, options) {
   const vr = new VRInstance(bundle, 'vr_test', parent, {
     // Add custom options here
+    raycasters: [
+        SimpleRayCaster         //this works best for Card. In browser, this should be removed so mouse pointer/touch is used instead
+    ],
+    cursorVisibility: "hidden",
     ...options,
   });
   vr.render = function() {

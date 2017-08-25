@@ -14,6 +14,37 @@ export default class ComeOnLook extends React.Component {
         }
     }
     
+    approach() {
+        if(this.retreatAnim) {
+            this.retreatAnim.stop();
+        }
+        if(!this.approachAnim) {
+            console.log('enter');
+            this.approachAnim = Animated.timing(
+                this.state.distance,
+                {
+                    toValue: -1.5,
+                    duration: 2000
+                }
+            );
+            this.approachAnim.start(()=>{this.approachAnim=null;})
+        }
+    }
+    
+    retreat() {
+        this.retreatAnim = Animated.sequence([
+            Animated.delay(1000),
+            Animated.timing(
+            this.state.distance,
+            {
+                toValue:this.maxDistance,
+                duration: 2000
+            }
+        )]);
+        
+        this.retreatAnim.start(() => {this.retreatAnim=null;})
+    }
+    
     render() {
         
         //clone the children but add props for when they are hovered over
@@ -27,32 +58,12 @@ export default class ComeOnLook extends React.Component {
                     style={{
                         transform:[
                             {translateZ:this.state.distance}
-                        ]
+                        ],
+                        position:'absolute'
                     }}
-                    onEnter={
-                        ()=>{
-                            console.log('enter');
-                            Animated.timing(
-                                this.state.distance,
-                                {
-                                    toValue: 0,
-                                    duration: 2000
-                                }
-                            ).start()
-                        }
-                    }
-                    onExit={
-                        ()=>{
-                            console.log('exit');
-                            Animated.timing(
-                                this.state.distance,
-                                {
-                                    toValue:this.maxDistance,
-                                    duration: 2000
-                                }
-                            ).start()
-                        }
-                    }
+                    onMove={this.approach.bind(this)}
+                    onEnter={this.approach.bind(this)}
+                    onExit={this.retreat.bind(this)}
                 >
                     {this.props.children}
                 </Animated.View>
